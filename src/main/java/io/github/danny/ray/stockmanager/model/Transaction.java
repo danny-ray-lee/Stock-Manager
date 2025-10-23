@@ -26,9 +26,12 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id = 0;
 
+    @Column(name = "position_id", nullable = false)
+    private int positionId = 0;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "position_id", nullable = false)
-    private Position position;
+    @JoinColumn(name = "position_id", nullable = false, insertable = false, updatable = false)
+    private Position position = null;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "trade_type", nullable = false, columnDefinition = "ENUM('BUY', 'SELL') DEFAULT 'BUY'")
@@ -55,9 +58,9 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(int id, Position position, TradeType tradeType, BigDecimal price, BigDecimal fee, BigDecimal tax, int quantity, String comment, LocalDateTime createdAt) {
+    public Transaction(int id, int positionId, TradeType tradeType, BigDecimal price, BigDecimal fee, BigDecimal tax, int quantity, String comment, LocalDateTime createdAt) {
         this.id = id;
-        this.position = position;
+        this.positionId = positionId;
         this.tradeType = tradeType;
         this.price = price;
         this.fee = fee;
@@ -73,6 +76,15 @@ public class Transaction {
 
     public Transaction setId(int id) {
         this.id = id;
+        return this;
+    }
+
+    public int getPositionId() {
+        return positionId;
+    }
+
+    public Transaction setPositionId(int positionId) {
+        this.positionId = positionId;
         return this;
     }
 

@@ -31,13 +31,19 @@ public class Position {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id = 0;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private int userId = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
+    private User user = null;
+
+    @Column(name = "product_id", nullable = false)
+    private int productId = 0;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false, insertable = false, updatable = false)
+    private Product product = null;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "ENUM('OPEN', 'CLOSE') DEFAULT 'OPEN'")
@@ -65,10 +71,10 @@ public class Position {
     public Position() {
     }
 
-    public Position(int id, User user, Product product, PositionStatus status, PositionDirection direction, int quantity, BigDecimal averagePrice, BigDecimal totalTax, LocalDateTime openAt, LocalDateTime closeAt) {
+    public Position(int id, int userId, int productId, PositionStatus status, PositionDirection direction, int quantity, BigDecimal averagePrice, BigDecimal totalTax, LocalDateTime openAt, LocalDateTime closeAt) {
         this.id = id;
-        this.user = user;
-        this.product = product;
+        this.userId = userId;
+        this.productId = productId;
         this.status = status;
         this.direction = direction;
         this.quantity = quantity;
@@ -87,12 +93,30 @@ public class Position {
         return this;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public Position setUserId(int userId) {
+        this.userId = userId;
+        return this;
+    }
+
     public User getUser() {
         return user;
     }
 
     public Position setUser(User user) {
         this.user = user;
+        return this;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public Position setProductId(int productId) {
+        this.productId = productId;
         return this;
     }
 
@@ -127,7 +151,7 @@ public class Position {
         return quantity;
     }
 
-    public Position setQuantity(Integer quantity) {
+    public Position setQuantity(int quantity) {
         this.quantity = quantity;
         return this;
     }

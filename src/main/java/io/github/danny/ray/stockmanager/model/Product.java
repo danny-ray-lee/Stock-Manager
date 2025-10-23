@@ -31,9 +31,12 @@ public class Product {
     @Column(nullable = false, length = 20, unique = true)
     private String symbol;
 
+    @Column(name = "currency", nullable = false)
+    private String currencySymbol;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "currency", referencedColumnName = "symbol", nullable = false)
-    private Currency currency;
+    @JoinColumn(name = "currency", referencedColumnName = "symbol", nullable = false, insertable = false, updatable = false)
+    private Currency currency = null;
 
     @Column(name = "step_point", nullable = false, columnDefinition = "INT DEFAULT 1")
     private int stepPoint = 1;
@@ -48,11 +51,11 @@ public class Product {
     public Product() {
     }
 
-    public Product(int id, String name, String symbol, Currency currency, int stepPoint, BigDecimal futureFee, ProductType type) {
+    public Product(int id, String name, String symbol, String currencySymbol, int stepPoint, BigDecimal futureFee, ProductType type) {
         this.id = id;
         this.name = name;
         this.symbol = symbol;
-        this.currency = currency;
+        this.currencySymbol = currencySymbol;
         this.stepPoint = stepPoint;
         this.futureFee = futureFee;
         this.type = type;
@@ -82,6 +85,15 @@ public class Product {
 
     public Product setSymbol(String symbol) {
         this.symbol = symbol;
+        return this;
+    }
+
+    public String getCurrencySymbol() {
+        return currencySymbol;
+    }
+
+    public Product setCurrencySymbol(String currencySymbol) {
+        this.currencySymbol = currencySymbol;
         return this;
     }
 
