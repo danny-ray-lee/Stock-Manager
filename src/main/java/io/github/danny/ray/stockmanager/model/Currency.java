@@ -19,7 +19,7 @@ public class Currency {
     @Id
     @Column(length = 10)
     private String symbol;
- 
+
     @Column(nullable = false, length = 10)
     private String name;
 
@@ -78,5 +78,11 @@ public class Currency {
     public Currency setLastUpdateAt(LocalDateTime lastUpdateAt) {
         this.lastUpdateAt = lastUpdateAt;
         return this;
+    }
+
+    public enum CurrencyType {
+        TWD,
+        USD,
+        JPY
     }
 }
