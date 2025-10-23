@@ -1,0 +1,57 @@
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE currency (
+    symbol VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(10) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    last_update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    symbol VARCHAR(20) NOT NULL UNIQUE,
+    currency VARCHAR(10) NOT NULL,
+    step_point INT NOT NULL DEFAULT 1 COMMENT '最小跳動點數',
+    future_fee DECIMAL(10,2) NULL DEFAULT NULL COMMENT '如果是期貨的話 手續費是多少',
+    type ENUM('STOCK', 'FUTURE') NOT NULL DEFAULT 'STOCK' COMMENT '類型是期貨還是股票',
+    FOREIGN KEY (currency) REFERENCES currency(symbol)
+);
+
+CREATE TABLE positions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    status ENUM('OPEN', 'CLOSE') NOT NULL DEFAULT 'OPEN',
+    direction ENUM('LONG', 'SHORT') NOT NULL DEFAULT 'LONG',
+    quantity INT NOT NULL DEFAULT 1 COMMENT '總部位數量',
+    average_price DECIMAL(10,2) NOT NULL DEFAULT 0 COMMENT '平均成本',
+    total_tax DECIMAL(10,2) NOT NULL DEFAULT 0 COMMENT '總稅金',
+    open_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    close_at TIMESTAMP NULL DEFAULT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    INDEX idx_user(user_id),
+    INDEX idx_user_product (user_id, product_id)
+);
+
+CREATE TABLE transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    position_id INT NOT NULL,
+    trade_type ENUM('BUY', 'SELL') NOT NULL DEFAULT 'BUY',
+    price DECIMAL(10,2) NOT NULL,
+    fee DECIMAL(10,2) NOT NULL DEFAULT 0,
+    tax DECIMAL(10,2) NOT NULL DEFAULT 0,
+    quantity INT NOT NULL,
+    comment VARCHAR(255) NULL DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (position_id) REFERENCES positions(id)
+);
+
