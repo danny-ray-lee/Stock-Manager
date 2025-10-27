@@ -8,9 +8,13 @@ CREATE TABLE users (
 );
 
 CREATE TABLE currency (
-    symbol VARCHAR(10) PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    symbol ENUM('USD', 'EUR', 'GBP', 'JPY', 'CNY', 'AUD', 'CAD', 'CHF', 'NZD', 'SGD', 'THB', 'IDR', 'MYR', 'PHP', 'VND', 'KRW', 'TWD') NOT NULL DEFAULT 'TWD',
     name VARCHAR(10) NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
+    cash_buy DECIMAL(10,2) NOT NULL COMMENT '現金買進',
+    cash_sell DECIMAL(10,2) NOT NULL COMMENT '現金賣出',
+    spot_buy DECIMAL(10,2) NOT NULL COMMENT '即期買入',
+    spot_sell DECIMAL(10,2) NOT NULL COMMENT '即期匯率',
     last_update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
@@ -18,11 +22,11 @@ CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     symbol VARCHAR(20) NOT NULL UNIQUE,
-    currency VARCHAR(10) NOT NULL,
+    currency INT NOT NULL,
     step_point INT NOT NULL DEFAULT 1 COMMENT '最小跳動點數',
     future_fee DECIMAL(10,2) NULL DEFAULT NULL COMMENT '如果是期貨的話 手續費是多少',
     type ENUM('STOCK', 'FUTURE') NOT NULL DEFAULT 'STOCK' COMMENT '類型是期貨還是股票',
-    FOREIGN KEY (currency) REFERENCES currency(symbol)
+    FOREIGN KEY (currency) REFERENCES currency(id)
 );
 
 CREATE TABLE positions (
