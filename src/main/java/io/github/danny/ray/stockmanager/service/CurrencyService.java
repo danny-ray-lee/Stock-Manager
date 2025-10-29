@@ -1,9 +1,15 @@
 package io.github.danny.ray.stockmanager.service;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.danny.ray.stockmanager.dto.currency.CurrencyResponseDto;
 import io.github.danny.ray.stockmanager.model.Currency;
-import io.github.danny.ray.stockmanager.model.Currency.CurrencySymbol;
+import io.github.danny.ray.stockmanager.model.enums.EnumCurrencySymbol;
 import io.github.danny.ray.stockmanager.repository.CurrencyRepository;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -11,12 +17,6 @@ import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class CurrencyService {
@@ -33,7 +33,7 @@ public class CurrencyService {
 
     private final CurrencyRepository repository;
 
-    private final Map<CurrencySymbol, Currency> currencyCache = new HashMap<>();
+    private final Map<EnumCurrencySymbol, Currency> currencyCache = new HashMap<>();
 
     public CurrencyService(OkHttpClient client, ObjectMapper objectMapper, CurrencyRepository repository) {
         this.client = client;
@@ -46,9 +46,9 @@ public class CurrencyService {
     }
 
     public void requestAllCurrency() {
-        for (CurrencySymbol symbol : CurrencySymbol.values()) {
+        for (EnumCurrencySymbol symbol : EnumCurrencySymbol.values()) {
 
-            if (symbol == CurrencySymbol.TWD) {
+            if (symbol == EnumCurrencySymbol.TWD) {
                 continue;
             }
 

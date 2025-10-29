@@ -41,8 +41,8 @@ public class Product {
     @Column(name = "step_point", nullable = false, columnDefinition = "INT DEFAULT 1")
     private int stepPoint = 1;
 
-    @Column(name = "future_fee", precision = 10, scale = 2)
-    private BigDecimal futureFee;
+    @Column(name = "step_price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal stepPrice = BigDecimal.ZERO;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "ENUM('STOCK', 'FUTURE') DEFAULT 'STOCK'")
@@ -51,13 +51,13 @@ public class Product {
     public Product() {
     }
 
-    public Product(int id, String name, String symbol, String currencySymbol, int stepPoint, BigDecimal futureFee, ProductType type) {
+    public Product(int id, String name, String symbol, String currencySymbol, int stepPoint, BigDecimal stepPrice, ProductType type) {
         this.id = id;
         this.name = name;
         this.symbol = symbol;
         this.currencySymbol = currencySymbol;
         this.stepPoint = stepPoint;
-        this.futureFee = futureFee;
+        this.stepPrice = stepPrice;
         this.type = type;
     }
 
@@ -115,12 +115,12 @@ public class Product {
         return this;
     }
 
-    public BigDecimal getFutureFee() {
-        return futureFee;
+    public BigDecimal getStepPrice() {
+        return stepPrice;
     }
 
-    public Product setFutureFee(BigDecimal futureFee) {
-        this.futureFee = futureFee;
+    public Product setStepPrice(BigDecimal stepPrice) {
+        this.stepPrice = stepPrice;
         return this;
     }
 

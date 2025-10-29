@@ -1,9 +1,19 @@
 package io.github.danny.ray.stockmanager.model;
 
-import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import io.github.danny.ray.stockmanager.model.enums.EnumCurrencySymbol;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 
 /**
  * 貨幣實體類別
@@ -18,7 +28,7 @@ public class Currency {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private CurrencySymbol symbol;
+    private EnumCurrencySymbol symbol;
 
     @Column(nullable = false, length = 10)
     private String name;
@@ -41,12 +51,12 @@ public class Currency {
     public Currency() {
     }
 
-    public Currency(CurrencySymbol symbol) {
+    public Currency(EnumCurrencySymbol symbol) {
         this.symbol = symbol;
         this.name = symbol.getDesc();
     }
 
-    public Currency(int id, CurrencySymbol symbol, String name, BigDecimal cashBuy, BigDecimal cashSell, BigDecimal spotBuy, BigDecimal spotSell, LocalDateTime lastUpdateAt) {
+    public Currency(int id, EnumCurrencySymbol symbol, String name, BigDecimal cashBuy, BigDecimal cashSell, BigDecimal spotBuy, BigDecimal spotSell, LocalDateTime lastUpdateAt) {
         this.id = id;
         this.symbol = symbol;
         this.name = name;
@@ -72,11 +82,11 @@ public class Currency {
         return this;
     }
 
-    public CurrencySymbol getSymbol() {
+    public EnumCurrencySymbol getSymbol() {
         return symbol;
     }
 
-    public Currency setSymbol(CurrencySymbol symbol) {
+    public Currency setSymbol(EnumCurrencySymbol symbol) {
         this.symbol = symbol;
         return this;
     }
@@ -133,25 +143,5 @@ public class Currency {
     public Currency setLastUpdateAt(LocalDateTime lastUpdateAt) {
         this.lastUpdateAt = lastUpdateAt;
         return this;
-    }
-
-    public enum CurrencySymbol {
-        TWD("新台幣"),
-        USD("美金"),
-        JPY("日圓");
-
-        private String desc;
-
-        CurrencySymbol(String desc) {
-            this.desc = desc;
-        }
-
-        public String getDesc() {
-            return desc;
-        }
-
-        public void setDesc(String desc) {
-            this.desc = desc;
-        }
     }
 }

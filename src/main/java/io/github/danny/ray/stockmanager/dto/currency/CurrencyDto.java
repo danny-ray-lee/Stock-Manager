@@ -1,10 +1,10 @@
 package io.github.danny.ray.stockmanager.dto.currency;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.danny.ray.stockmanager.model.Currency;
-
-import java.time.LocalDate;
+import io.github.danny.ray.stockmanager.model.enums.EnumCurrencySymbol;
 
 public class CurrencyDto {
 
@@ -12,7 +12,7 @@ public class CurrencyDto {
     private LocalDate date;
 
     @JsonProperty("currency")
-    private Currency.CurrencySymbol currency;
+    private EnumCurrencySymbol currency;
 
     @JsonProperty("cash_buy")
     private double cashBuy;
@@ -35,11 +35,11 @@ public class CurrencyDto {
         return this;
     }
 
-    public Currency.CurrencySymbol getCurrency() {
+    public EnumCurrencySymbol getCurrency() {
         return currency;
     }
 
-    public CurrencyDto setCurrency(Currency.CurrencySymbol currency) {
+    public CurrencyDto setCurrency(EnumCurrencySymbol currency) {
         this.currency = currency;
         return this;
     }
