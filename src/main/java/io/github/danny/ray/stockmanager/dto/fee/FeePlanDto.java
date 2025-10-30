@@ -7,7 +7,7 @@ import io.github.danny.ray.stockmanager.model.enums.EnumProductType;
 
 public class FeePlanDto {
 
-    private int id;
+    private int id = 0;
     private String name;
     private EnumProductType type;
     private EnumCurrencySymbol currency;

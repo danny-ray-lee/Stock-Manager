@@ -27,6 +27,10 @@ public class FeePlanService {
                 .toList();
     }
 
+    public void deleteFeePlan(int id) {
+        feePlanRepository.deleteById(id);
+    }
+
     public List<FeePlan> fetchFeePlan(EnumProductType type) {
         return feePlanRepository.findByType(type);
     }
