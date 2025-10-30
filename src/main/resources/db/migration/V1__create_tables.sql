@@ -44,17 +44,21 @@ CREATE TABLE positions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     product_id INT NOT NULL,
+    fee_plan_id INT NOT NULL,
     status ENUM('OPEN', 'CLOSE') NOT NULL DEFAULT 'OPEN',
     direction ENUM('LONG', 'SHORT') NOT NULL DEFAULT 'LONG',
     quantity INT NOT NULL DEFAULT 1 COMMENT '總部位數量',
-    average_price DECIMAL(10,2) NOT NULL DEFAULT 0 COMMENT '平均成本',
+    average_cost DECIMAL(10,2) NOT NULL DEFAULT 0 COMMENT '平均成本',
+    balance_cost DECIMAL(10,2) NOT NULL DEFAULT 0 COMMENT '平衡成本',
     total_tax DECIMAL(10,2) NOT NULL DEFAULT 0 COMMENT '總稅金',
     open_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     close_at TIMESTAMP NULL DEFAULT NULL,
+    comment VARCHAR(255) NULL DEFAULT NULL,
+    INDEX idx_user(user_id),
+    INDEX idx_user_product (user_id, product_id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (product_id) REFERENCES products(id),
-    INDEX idx_user(user_id),
-    INDEX idx_user_product (user_id, product_id)
+    FOREIGN KEY (fee_plan_id) REFERENCES fee_plan(id)
 );
 
 CREATE TABLE transactions (
@@ -62,8 +66,6 @@ CREATE TABLE transactions (
     position_id INT NOT NULL,
     trade_type ENUM('BUY', 'SELL') NOT NULL DEFAULT 'BUY',
     price DECIMAL(10,2) NOT NULL,
-    fee DECIMAL(10,2) NOT NULL DEFAULT 0,
-    tax DECIMAL(10,2) NOT NULL DEFAULT 0,
     quantity INT NOT NULL,
     comment VARCHAR(255) NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
