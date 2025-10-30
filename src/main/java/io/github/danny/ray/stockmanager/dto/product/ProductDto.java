@@ -2,8 +2,8 @@ package io.github.danny.ray.stockmanager.dto.product;
 
 import java.math.BigDecimal;
 
-import io.github.danny.ray.stockmanager.model.Product.ProductType;
 import io.github.danny.ray.stockmanager.model.enums.EnumCurrencySymbol;
+import io.github.danny.ray.stockmanager.model.enums.EnumProductType;
 
 public class ProductDto {
 
@@ -15,11 +15,24 @@ public class ProductDto {
 
     private EnumCurrencySymbol currency;
 
-    private int stepPoint = 1;
+    private BigDecimal stepPoint;
 
-    private BigDecimal future_fee = BigDecimal.ZERO;
+    private BigDecimal stepPrice;
 
-    private ProductType type;
+    private EnumProductType type;
+
+    public ProductDto() {
+    }
+
+    public ProductDto(int id, String name, String symbol, EnumCurrencySymbol currency, BigDecimal stepPoint, BigDecimal stepPrice, EnumProductType type) {
+        this.id = id;
+        this.name = name;
+        this.symbol = symbol;
+        this.currency = currency;
+        this.stepPoint = stepPoint;
+        this.stepPrice = stepPrice;
+        this.type = type;
+    }
 
     public int getId() {
         return id;
@@ -57,29 +70,29 @@ public class ProductDto {
         return this;
     }
 
-    public int getStepPoint() {
+    public BigDecimal getStepPoint() {
         return stepPoint;
     }
 
-    public ProductDto setStepPoint(int stepPoint) {
+    public ProductDto setStepPoint(BigDecimal stepPoint) {
         this.stepPoint = stepPoint;
         return this;
     }
 
-    public BigDecimal getFuture_fee() {
-        return future_fee;
+    public BigDecimal getStepPrice() {
+        return stepPrice;
     }
 
-    public ProductDto setFuture_fee(BigDecimal future_fee) {
-        this.future_fee = future_fee;
+    public ProductDto setStepPrice(BigDecimal stepPrice) {
+        this.stepPrice = stepPrice;
         return this;
     }
 
-    public ProductType getType() {
+    public EnumProductType getType() {
         return type;
     }
 
-    public ProductDto setType(ProductType type) {
+    public ProductDto setType(EnumProductType type) {
         this.type = type;
         return this;
     }

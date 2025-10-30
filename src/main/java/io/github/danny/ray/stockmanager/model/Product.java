@@ -2,16 +2,15 @@ package io.github.danny.ray.stockmanager.model;
 
 import java.math.BigDecimal;
 
+import io.github.danny.ray.stockmanager.model.enums.EnumCurrencySymbol;
+import io.github.danny.ray.stockmanager.model.enums.EnumProductType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -31,31 +30,28 @@ public class Product {
     @Column(nullable = false, length = 20, unique = true)
     private String symbol;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "currency", nullable = false)
-    private String currencySymbol;
+    private EnumCurrencySymbol currency;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "currency", referencedColumnName = "symbol", nullable = false, insertable = false, updatable = false)
-    private Currency currency = null;
-
-    @Column(name = "step_point", nullable = false, columnDefinition = "INT DEFAULT 1")
-    private int stepPoint = 1;
+    @Column(name = "step_point", nullable = false)
+    private BigDecimal stepPoint = BigDecimal.ONE;
 
     @Column(name = "step_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal stepPrice = BigDecimal.ZERO;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "ENUM('STOCK', 'FUTURE') DEFAULT 'STOCK'")
-    private ProductType type = ProductType.STOCK;
+    @Column(nullable = false)
+    private EnumProductType type = EnumProductType.STOCK;
 
     public Product() {
     }
 
-    public Product(int id, String name, String symbol, String currencySymbol, int stepPoint, BigDecimal stepPrice, ProductType type) {
+    public Product(int id, String name, String symbol, EnumCurrencySymbol currency, BigDecimal stepPoint, BigDecimal stepPrice, EnumProductType type) {
         this.id = id;
         this.name = name;
         this.symbol = symbol;
-        this.currencySymbol = currencySymbol;
+        this.currency = currency;
         this.stepPoint = stepPoint;
         this.stepPrice = stepPrice;
         this.type = type;
@@ -88,29 +84,20 @@ public class Product {
         return this;
     }
 
-    public String getCurrencySymbol() {
-        return currencySymbol;
-    }
-
-    public Product setCurrencySymbol(String currencySymbol) {
-        this.currencySymbol = currencySymbol;
-        return this;
-    }
-
-    public Currency getCurrency() {
+    public EnumCurrencySymbol getCurrency() {
         return currency;
     }
 
-    public Product setCurrency(Currency currency) {
+    public Product setCurrency(EnumCurrencySymbol currency) {
         this.currency = currency;
         return this;
     }
 
-    public int getStepPoint() {
+    public BigDecimal getStepPoint() {
         return stepPoint;
     }
 
-    public Product setStepPoint(int stepPoint) {
+    public Product setStepPoint(BigDecimal stepPoint) {
         this.stepPoint = stepPoint;
         return this;
     }
@@ -124,16 +111,12 @@ public class Product {
         return this;
     }
 
-    public ProductType getType() {
+    public EnumProductType getType() {
         return type;
     }
 
-    public Product setType(ProductType type) {
+    public Product setType(EnumProductType type) {
         this.type = type;
         return this;
-    }
-
-    public enum ProductType {
-        STOCK, FUTURE
     }
 }

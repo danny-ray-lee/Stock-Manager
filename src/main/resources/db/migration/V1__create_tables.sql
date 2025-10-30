@@ -33,11 +33,10 @@ CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     symbol VARCHAR(20) NOT NULL UNIQUE,
-    currency INT NOT NULL,
-    step_point INT NOT NULL DEFAULT 1 COMMENT '最小跳動點數',
+    currency ENUM('USD', 'EUR', 'GBP', 'JPY', 'CNY', 'AUD', 'CAD', 'CHF', 'NZD', 'SGD', 'THB', 'IDR', 'MYR', 'PHP', 'VND', 'KRW', 'TWD') NOT NULL DEFAULT 'TWD',
+    step_point DECIMAL(10,2) NOT NULL DEFAULT 1 COMMENT '最小跳動點數',
     step_price DECIMAL(10,2) DEFAULT 10 COMMENT '一跳金額',
-    type ENUM('STOCK', 'FUTURE') NOT NULL DEFAULT 'STOCK' COMMENT '類型是期貨還是股票',
-    FOREIGN KEY (currency) REFERENCES currency(id)
+    type ENUM('STOCK', 'FUTURE') NOT NULL DEFAULT 'STOCK' COMMENT '類型是期貨還是股票'
 );
 
 CREATE TABLE positions (
