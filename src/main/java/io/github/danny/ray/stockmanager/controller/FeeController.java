@@ -39,7 +39,7 @@ public class FeeController {
         return BaseResult.ok(dtoList);
     }
 
-    @PostMapping("/upsert")
+    @PostMapping
     public BaseResult<Void> createOrUpdateFeePlan(@RequestBody FeePlanDto dto) {
         FeePlan feePlan = switch (dto.getType()) {
             case STOCK -> modelMapper.map(dto, StockFeePlan.class);
