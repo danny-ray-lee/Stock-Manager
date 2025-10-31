@@ -42,3 +42,5 @@ build/
 *.*~
 *-local.*
 .gemini
+gha-creds-*.json
+.github

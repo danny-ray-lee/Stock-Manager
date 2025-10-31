@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,10 +36,10 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    public User() {
+    public Users() {
     }
 
-    public User(int id, String username, String password, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Users(int id, String username, String password, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -57,7 +57,7 @@ public class User {
         return id;
     }
 
-    public User setId(int id) {
+    public Users setId(int id) {
         this.id = id;
         return this;
     }
@@ -66,7 +66,7 @@ public class User {
         return username;
     }
 
-    public User setUsername(String username) {
+    public Users setUsername(String username) {
         this.username = username;
         return this;
     }
@@ -75,7 +75,7 @@ public class User {
         return password;
     }
 
-    public User setPassword(String password) {
+    public Users setPassword(String password) {
         this.password = password;
         return this;
     }
@@ -84,7 +84,7 @@ public class User {
         return email;
     }
 
-    public User setEmail(String email) {
+    public Users setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -93,7 +93,7 @@ public class User {
         return createdAt;
     }
 
-    public User setCreatedAt(LocalDateTime createdAt) {
+    public Users setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
         return this;
     }
@@ -102,8 +102,21 @@ public class User {
         return updatedAt;
     }
 
-    public User setUpdatedAt(LocalDateTime updatedAt) {
+    public Users setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
         return this;
+    }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

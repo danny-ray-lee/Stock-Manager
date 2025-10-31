@@ -4,9 +4,6 @@ import java.util.List;
 
 import io.github.danny.ray.lib.response.dto.BaseResult;
 import io.github.danny.ray.stockmanager.dto.fee.FeePlanDto;
-import io.github.danny.ray.stockmanager.model.fee.FeePlan;
-import io.github.danny.ray.stockmanager.model.fee.FutureFeePlan;
-import io.github.danny.ray.stockmanager.model.fee.StockFeePlan;
 import io.github.danny.ray.stockmanager.service.FeePlanService;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 手續費
+ */
 @RestController
 @RequestMapping("/api/fee")
 public class FeeController {
@@ -30,6 +30,11 @@ public class FeeController {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * 查詢全部
+     *
+     * @return 手續費列表
+     */
     @GetMapping("/all")
     public BaseResult<List<FeePlanDto>> fetchFeePlan() {
         List<FeePlanDto> dtoList = feePlanService.fetchAllFeePlans()
@@ -39,16 +44,22 @@ public class FeeController {
         return BaseResult.ok(dtoList);
     }
 
+    /**
+     * 新增或更新
+     *
+     * @param dto 手續費DTO
+     */
     @PostMapping
     public BaseResult<Void> createOrUpdateFeePlan(@RequestBody FeePlanDto dto) {
-        FeePlan feePlan = switch (dto.getType()) {
-            case STOCK -> modelMapper.map(dto, StockFeePlan.class);
-            case FUTURE -> modelMapper.map(dto, FutureFeePlan.class);
-        };
-        feePlanService.createOrUpdateFeePlan(feePlan);
+        feePlanService.createOrUpdateFeePlan(dto);
         return BaseResult.ok("Created Success");
     }
 
+    /**
+     * 刪除
+     *
+     * @param id 手續費ID
+     */
     @DeleteMapping("/{id}")
     public BaseResult<Void> deleteFeePlan(@PathVariable("id") int id) {
         feePlanService.deleteFeePlan(id);

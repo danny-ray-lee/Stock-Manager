@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "products")
-public class Product {
+public class Products {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,10 +44,10 @@ public class Product {
     @Column(nullable = false)
     private EnumProductType type = EnumProductType.STOCK;
 
-    public Product() {
+    public Products() {
     }
 
-    public Product(int id, String name, String symbol, EnumCurrencySymbol currency, BigDecimal stepPoint, BigDecimal stepPrice, EnumProductType type) {
+    public Products(int id, String name, String symbol, EnumCurrencySymbol currency, BigDecimal stepPoint, BigDecimal stepPrice, EnumProductType type) {
         this.id = id;
         this.name = name;
         this.symbol = symbol;
@@ -61,7 +61,7 @@ public class Product {
         return id;
     }
 
-    public Product setId(int id) {
+    public Products setId(int id) {
         this.id = id;
         return this;
     }
@@ -70,7 +70,7 @@ public class Product {
         return name;
     }
 
-    public Product setName(String name) {
+    public Products setName(String name) {
         this.name = name;
         return this;
     }
@@ -79,7 +79,7 @@ public class Product {
         return symbol;
     }
 
-    public Product setSymbol(String symbol) {
+    public Products setSymbol(String symbol) {
         this.symbol = symbol;
         return this;
     }
@@ -88,7 +88,7 @@ public class Product {
         return currency;
     }
 
-    public Product setCurrency(EnumCurrencySymbol currency) {
+    public Products setCurrency(EnumCurrencySymbol currency) {
         this.currency = currency;
         return this;
     }
@@ -97,7 +97,7 @@ public class Product {
         return stepPoint;
     }
 
-    public Product setStepPoint(BigDecimal stepPoint) {
+    public Products setStepPoint(BigDecimal stepPoint) {
         this.stepPoint = stepPoint;
         return this;
     }
@@ -106,7 +106,7 @@ public class Product {
         return stepPrice;
     }
 
-    public Product setStepPrice(BigDecimal stepPrice) {
+    public Products setStepPrice(BigDecimal stepPrice) {
         this.stepPrice = stepPrice;
         return this;
     }
@@ -115,7 +115,7 @@ public class Product {
         return type;
     }
 
-    public Product setType(EnumProductType type) {
+    public Products setType(EnumProductType type) {
         this.type = type;
         return this;
     }

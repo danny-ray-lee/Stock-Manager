@@ -46,7 +46,7 @@ CREATE TABLE positions (
     fee_plan_id INT NOT NULL,
     status ENUM('OPEN', 'CLOSE') NOT NULL DEFAULT 'OPEN',
     direction ENUM('LONG', 'SHORT') NOT NULL DEFAULT 'LONG',
-    quantity INT NOT NULL DEFAULT 1 COMMENT '總部位數量',
+    quantity INT NOT NULL DEFAULT 0 COMMENT '總部位數量',
     average_cost DECIMAL(10,2) NOT NULL DEFAULT 0 COMMENT '平均成本',
     balance_cost DECIMAL(10,2) NOT NULL DEFAULT 0 COMMENT '平衡成本',
     total_tax DECIMAL(10,2) NOT NULL DEFAULT 0 COMMENT '總稅金',

@@ -28,7 +28,7 @@ import jakarta.persistence.Table;
                 @Index(name = "idx_user", columnList = "user_id"),
                 @Index(name = "idx_user_product", columnList = "user_id, product_id")
         })
-public class Position {
+public class Positions {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +36,11 @@ public class Position {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Users users;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    private Products products;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fee_plan_id", nullable = false)
@@ -53,7 +53,7 @@ public class Position {
     private EnumPositionDirection direction = EnumPositionDirection.LONG;
 
     @Column(nullable = false)
-    private int quantity = 1;
+    private int quantity = 0;
 
     @Column(name = "average_cost", nullable = false, precision = 10, scale = 2)
     private BigDecimal averageCost = BigDecimal.ZERO;
@@ -73,13 +73,13 @@ public class Position {
     @Column(name = "comment")
     private String comment = null;
 
-    public Position() {
+    public Positions() {
     }
 
-    public Position(int id, User user, Product product, FeePlan feePlan, EnumPositionStatus status, EnumPositionDirection direction, int quantity, BigDecimal averageCost, BigDecimal balanceCost, BigDecimal totalTax, LocalDateTime openAt, LocalDateTime closeAt, String comment) {
+    public Positions(int id, Users users, Products products, FeePlan feePlan, EnumPositionStatus status, EnumPositionDirection direction, int quantity, BigDecimal averageCost, BigDecimal balanceCost, BigDecimal totalTax, LocalDateTime openAt, LocalDateTime closeAt, String comment) {
         this.id = id;
-        this.user = user;
-        this.product = product;
+        this.users = users;
+        this.products = products;
         this.feePlan = feePlan;
         this.status = status;
         this.direction = direction;
@@ -96,26 +96,26 @@ public class Position {
         return id;
     }
 
-    public Position setId(int id) {
+    public Positions setId(int id) {
         this.id = id;
         return this;
     }
 
-    public User getUser() {
-        return user;
+    public Users getUser() {
+        return users;
     }
 
-    public Position setUser(User user) {
-        this.user = user;
+    public Positions setUser(Users users) {
+        this.users = users;
         return this;
     }
 
-    public Product getProduct() {
-        return product;
+    public Products getProduct() {
+        return products;
     }
 
-    public Position setProduct(Product product) {
-        this.product = product;
+    public Positions setProduct(Products products) {
+        this.products = products;
         return this;
     }
 
@@ -123,7 +123,7 @@ public class Position {
         return feePlan;
     }
 
-    public Position setFeePlan(FeePlan feePlan) {
+    public Positions setFeePlan(FeePlan feePlan) {
         this.feePlan = feePlan;
         return this;
     }
@@ -132,7 +132,7 @@ public class Position {
         return status;
     }
 
-    public Position setStatus(EnumPositionStatus status) {
+    public Positions setStatus(EnumPositionStatus status) {
         this.status = status;
         return this;
     }
@@ -141,7 +141,7 @@ public class Position {
         return direction;
     }
 
-    public Position setDirection(EnumPositionDirection direction) {
+    public Positions setDirection(EnumPositionDirection direction) {
         this.direction = direction;
         return this;
     }
@@ -150,7 +150,7 @@ public class Position {
         return quantity;
     }
 
-    public Position setQuantity(int quantity) {
+    public Positions setQuantity(int quantity) {
         this.quantity = quantity;
         return this;
     }
@@ -159,7 +159,7 @@ public class Position {
         return averageCost;
     }
 
-    public Position setAverageCost(BigDecimal averageCost) {
+    public Positions setAverageCost(BigDecimal averageCost) {
         this.averageCost = averageCost;
         return this;
     }
@@ -168,7 +168,7 @@ public class Position {
         return balanceCost;
     }
 
-    public Position setBalanceCost(BigDecimal balanceCost) {
+    public Positions setBalanceCost(BigDecimal balanceCost) {
         this.balanceCost = balanceCost;
         return this;
     }
@@ -177,7 +177,7 @@ public class Position {
         return totalTax;
     }
 
-    public Position setTotalTax(BigDecimal totalTax) {
+    public Positions setTotalTax(BigDecimal totalTax) {
         this.totalTax = totalTax;
         return this;
     }
@@ -186,7 +186,7 @@ public class Position {
         return openAt;
     }
 
-    public Position setOpenAt(LocalDateTime openAt) {
+    public Positions setOpenAt(LocalDateTime openAt) {
         this.openAt = openAt;
         return this;
     }
@@ -195,7 +195,7 @@ public class Position {
         return closeAt;
     }
 
-    public Position setCloseAt(LocalDateTime closeAt) {
+    public Positions setCloseAt(LocalDateTime closeAt) {
         this.closeAt = closeAt;
         return this;
     }
@@ -204,7 +204,7 @@ public class Position {
         return comment;
     }
 
-    public Position setComment(String comment) {
+    public Positions setComment(String comment) {
         this.comment = comment;
         return this;
     }

@@ -85,7 +85,7 @@ public class CurrencyService {
         }
     }
 
-    public void updateCurrency(Currency currency) {
+    private void updateCurrency(Currency currency) {
         Currency newCurrency = repository.save(currency);
         currencyCache.put(newCurrency.getSymbol(), newCurrency);
     }
