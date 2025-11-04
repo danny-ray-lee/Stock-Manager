@@ -36,14 +36,11 @@ public class ProductService {
 
     @Transactional
     public void createOrUpdate(ProductDto dto) {
-
-
         Products product = dto.getId() == 0
-                ? create(dto)
+                ? getBySymbol(dto.getSymbol()).map(p -> updateExists(dto)).orElseGet(() -> create(dto))
                 : updateExists(dto);
 
         save(product);
-
     }
 
     @Transactional
@@ -63,6 +60,12 @@ public class ProductService {
         return get(id)
                 .map(this::convertToDto)
                 .orElseThrow(() -> new FetchException("Product not found, ID: " + id));
+    }
+
+    public Optional<Products> getBySymbol(String symbol) {
+        return productCache.values().stream()
+                .filter(product -> product.getSymbol().equals(symbol))
+                .findFirst();
     }
 
     public List<Products> getAll() {
