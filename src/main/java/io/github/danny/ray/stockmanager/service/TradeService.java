@@ -1,77 +1,46 @@
 package io.github.danny.ray.stockmanager.service;
 
+import java.util.List;
+
 import io.github.danny.ray.stockmanager.dto.trade.TradeDto;
-import io.github.danny.ray.stockmanager.exception.FetchException;
+import io.github.danny.ray.stockmanager.dto.trade.TradePair;
 import io.github.danny.ray.stockmanager.model.Positions;
-import io.github.danny.ray.stockmanager.model.Products;
-import io.github.danny.ray.stockmanager.model.Transactions;
 import io.github.danny.ray.stockmanager.model.Users;
-import io.github.danny.ray.stockmanager.model.enums.EnumPositionDirection;
-import io.github.danny.ray.stockmanager.model.enums.EnumPositionStatus;
-import io.github.danny.ray.stockmanager.model.fee.FeePlan;
-import io.github.danny.ray.stockmanager.repository.FeePlanRepository;
-import io.github.danny.ray.stockmanager.repository.PositionRepository;
-import io.github.danny.ray.stockmanager.repository.ProductRepository;
-import io.github.danny.ray.stockmanager.repository.TransactionRepository;
+import io.github.danny.ray.stockmanager.model.enums.EnumTradeItemSort;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TradeService {
 
-    private final FeePlanRepository feePlanRepository;
+    private final PositionService positionService;
 
-    private final ProductRepository productRepository;
+    private final TransactionService transactionService;
 
-    private final PositionRepository positionRepository;
-
-    private final TransactionRepository transactionRepository;
-
-    public TradeService(FeePlanRepository feePlanRepository, ProductRepository productRepository, PositionRepository positionRepository, TransactionRepository transactionRepository) {
-        this.feePlanRepository = feePlanRepository;
-        this.productRepository = productRepository;
-        this.positionRepository = positionRepository;
-        this.transactionRepository = transactionRepository;
+    public TradeService(
+            PositionService positionService,
+            TransactionService transactionService
+    ) {
+        this.positionService = positionService;
+        this.transactionService = transactionService;
     }
 
-    public void trade(TradeDto dto, Users currentUsers) {
+    public void trade(TradeDto dto, Users currentUser) {
 
-        FeePlan feePlan = feePlanRepository.findById(dto.getFeePlanId())
-                .orElseThrow(() -> new FetchException("Fee plan not found, ID: " + dto.getFeePlanId()));
+        Positions position = positionService.getByUserAndProductAndStatusOpen(currentUser.getId(), dto.getProductId())
+                .orElseGet(() -> positionService.create(dto, currentUser));
 
-        Products products = productRepository.findById(dto.getProductId())
-                .orElseThrow(() -> new FetchException("Product not found, ID: " + dto.getProductId()));
+        transactionService.create(dto, position);
 
-        Positions position = positionRepository.findByUserAndProductAndStatusOpen(currentUsers, products)
-                .orElseGet(() -> {
-                    Positions newPositions = new Positions()
-                            .setUser(currentUsers)
-                            .setProduct(products)
-                            .setFeePlan(feePlan)
-                            .setStatus(EnumPositionStatus.OPEN)
-                            .setComment(dto.getComment());
-                    switch (dto.getTradeType()) {
-                        case BUY:
-                            newPositions.setDirection(EnumPositionDirection.LONG);
-                            break;
-                        case SELL:
-                            newPositions.setDirection(EnumPositionDirection.SHORT);
-                            break;
-                    }
-                    return newPositions;
-                });
+        positionService.updateMetrics(position.getId());
 
-        Transactions transaction = new Transactions()
-                .setPositions(position)
-                .setTradeType(dto.getTradeType())
-                .setPrice(dto.getPrice())
-                .setQuantity(dto.getQuantity())
-                .setComment(dto.getComment());
-
-        transactionRepository.save(transaction);
-
-
-        positionRepository.save(position);
     }
 
+    public List<TradePair> getTradePairs(int positionId) {
+        return transactionService.getTradePair(positionId, EnumTradeItemSort.PRICE);
+    }
+
+    public List<TradePair> getTradePairs(int positionId, EnumTradeItemSort sortBy) {
+        return transactionService.getTradePair(positionId, sortBy);
+    }
 
 }

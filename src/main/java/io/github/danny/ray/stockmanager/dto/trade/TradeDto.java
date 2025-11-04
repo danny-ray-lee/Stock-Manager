@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 
 import io.github.danny.ray.stockmanager.model.enums.EnumTradeType;
 
+/**
+ * for create trade
+ */
 public class TradeDto {
 
     private int productId;

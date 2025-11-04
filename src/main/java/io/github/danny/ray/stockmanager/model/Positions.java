@@ -36,11 +36,11 @@ public class Positions {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private Users users;
+    private Users user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private Products products;
+    private Products product;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fee_plan_id", nullable = false)
@@ -76,10 +76,10 @@ public class Positions {
     public Positions() {
     }
 
-    public Positions(int id, Users users, Products products, FeePlan feePlan, EnumPositionStatus status, EnumPositionDirection direction, int quantity, BigDecimal averageCost, BigDecimal balanceCost, BigDecimal totalTax, LocalDateTime openAt, LocalDateTime closeAt, String comment) {
+    public Positions(int id, Users user, Products product, FeePlan feePlan, EnumPositionStatus status, EnumPositionDirection direction, int quantity, BigDecimal averageCost, BigDecimal balanceCost, BigDecimal totalTax, LocalDateTime openAt, LocalDateTime closeAt, String comment) {
         this.id = id;
-        this.users = users;
-        this.products = products;
+        this.user = user;
+        this.product = product;
         this.feePlan = feePlan;
         this.status = status;
         this.direction = direction;
@@ -102,20 +102,20 @@ public class Positions {
     }
 
     public Users getUser() {
-        return users;
+        return user;
     }
 
     public Positions setUser(Users users) {
-        this.users = users;
+        this.user = users;
         return this;
     }
 
     public Products getProduct() {
-        return products;
+        return product;
     }
 
     public Positions setProduct(Products products) {
-        this.products = products;
+        this.product = products;
         return this;
     }
 

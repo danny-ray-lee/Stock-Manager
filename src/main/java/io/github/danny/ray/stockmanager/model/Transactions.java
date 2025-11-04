@@ -29,7 +29,7 @@ public class Transactions {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id", nullable = false)
-    private Positions positions;
+    private Positions position;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "trade_type", nullable = false)
@@ -41,18 +41,18 @@ public class Transactions {
     @Column(nullable = false)
     private int quantity;
 
-    @Column(length = 255)
+    @Column
     private String comment;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public Transactions() {
     }
 
-    public Transactions(int id, Positions positions, EnumTradeType tradeType, BigDecimal price, int quantity, String comment, LocalDateTime createdAt) {
+    public Transactions(int id, Positions position, EnumTradeType tradeType, BigDecimal price, int quantity, String comment, LocalDateTime createdAt) {
         this.id = id;
-        this.positions = positions;
+        this.position = position;
         this.tradeType = tradeType;
         this.price = price;
         this.quantity = quantity;
@@ -69,12 +69,12 @@ public class Transactions {
         return this;
     }
 
-    public Positions getPositions() {
-        return positions;
+    public Positions getPosition() {
+        return position;
     }
 
-    public Transactions setPositions(Positions positions) {
-        this.positions = positions;
+    public Transactions setPosition(Positions position) {
+        this.position = position;
         return this;
     }
 

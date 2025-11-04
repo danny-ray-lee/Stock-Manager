@@ -1,12 +1,17 @@
 package io.github.danny.ray.stockmanager.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.github.danny.ray.stockmanager.dto.product.ProductDto;
-import io.github.danny.ray.stockmanager.exception.NotFoundException;
+import io.github.danny.ray.stockmanager.exception.FetchException;
 import io.github.danny.ray.stockmanager.model.Products;
 import io.github.danny.ray.stockmanager.repository.ProductRepository;
+import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -17,31 +22,79 @@ public class ProductService {
 
     private final ModelMapper modelMapper;
 
+    private final Map<Integer, Products> productCache = new ConcurrentHashMap<>();
+
     public ProductService(ProductRepository productRepository, ModelMapper modelMapper) {
         this.productRepository = productRepository;
         this.modelMapper = modelMapper;
     }
 
-    public Products fetchProduct(int id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Product not found, Id: " + id));
+    @PostConstruct
+    public void init() {
+        productRepository.findAll().forEach(product -> productCache.put(product.getId(), product));
     }
 
-    public List<Products> fetchAllProducts() {
-        return productRepository.findAll();
+    @Transactional
+    public void createOrUpdate(ProductDto dto) {
+
+
+        Products product = dto.getId() == 0
+                ? create(dto)
+                : updateExists(dto);
+
+        save(product);
+
     }
 
-    public ProductDto createOrUpdateProduct(ProductDto dto) {
-        Products products = modelMapper.map(dto, Products.class);
-        Optional<Products> productOption = productRepository.findBySymbol(dto.getSymbol());
-        if (productOption.isPresent()) {
-            products.setId(productOption.get().getId());
+    @Transactional
+    public void delete(int id) {
+        if (!productCache.containsKey(id)) {
+            throw new FetchException("Product not found, ID: " + id);
         }
-        products = productRepository.save(products);
-        return modelMapper.map(products, ProductDto.class);
+        productCache.remove(id);
+        productRepository.deleteById(id);
     }
 
-    public void deleteProduct(int id) {
-        productRepository.deleteById(id);
+    public Optional<Products> get(int id) {
+        return Optional.ofNullable(productCache.get(id));
+    }
+
+    public ProductDto getDto(int id) {
+        return get(id)
+                .map(this::convertToDto)
+                .orElseThrow(() -> new FetchException("Product not found, ID: " + id));
+    }
+
+    public List<Products> getAll() {
+        return new ArrayList<>(productCache.values());
+    }
+
+    public List<ProductDto> getAllDto() {
+        return convertToDto(getAll());
+    }
+
+    private Products save(Products product) {
+        Products newProduct = productRepository.save(product);
+        productCache.put(newProduct.getId(), newProduct);
+        return newProduct;
+    }
+
+    private Products create(ProductDto dto) {
+        return modelMapper.map(dto, Products.class);
+    }
+
+    private Products updateExists(ProductDto dto) {
+        Products existing = get(dto.getId())
+                .orElseThrow(() -> new FetchException("Products not found, ID: " + dto.getId()));
+        modelMapper.map(dto, existing);
+        return existing;
+    }
+
+    private ProductDto convertToDto(Products product) {
+        return modelMapper.map(product, ProductDto.class);
+    }
+
+    private List<ProductDto> convertToDto(List<Products> products) {
+        return products.stream().map(this::convertToDto).toList();
     }
 }

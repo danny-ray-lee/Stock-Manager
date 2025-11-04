@@ -22,7 +22,7 @@ public class GlobalControllerAdvice {
 
         return switch (e) {
             case NotFoundException ex -> BaseResult.error(HttpStatus.NOT_FOUND, ex.getMessage());
-            default -> BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            default -> BaseResult.error(HttpStatus.NOT_FOUND, e.getMessage());
         };
     }
 

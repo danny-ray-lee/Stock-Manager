@@ -44,3 +44,6 @@ build/
 .gemini
 gha-creds-*.json
 .github
+
+R__*.sql
+qodana.*

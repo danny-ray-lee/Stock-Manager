@@ -5,7 +5,6 @@ import java.util.List;
 import io.github.danny.ray.lib.response.dto.BaseResult;
 import io.github.danny.ray.stockmanager.dto.fee.FeePlanDto;
 import io.github.danny.ray.stockmanager.service.FeePlanService;
-import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,30 +18,35 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/fee")
-public class FeeController {
+public class FeePlanController {
 
     private final FeePlanService feePlanService;
 
-    private final ModelMapper modelMapper;
-
-    public FeeController(FeePlanService feePlanService, ModelMapper modelMapper) {
+    public FeePlanController(FeePlanService feePlanService) {
         this.feePlanService = feePlanService;
-        this.modelMapper = modelMapper;
+    }
+
+    /**
+     * 根據ID查詢
+     *
+     * @param id 手續費ID
+     * @return 手續費資訊
+     */
+    @GetMapping("/{id}")
+    public BaseResult<FeePlanDto> get(@PathVariable("id") int id) {
+        return BaseResult.ok(feePlanService.getDto(id));
     }
 
     /**
      * 查詢全部
      *
-     * @return 手續費列表
+     * @return 手續費資訊列表
      */
-    @GetMapping("/all")
-    public BaseResult<List<FeePlanDto>> fetchFeePlan() {
-        List<FeePlanDto> dtoList = feePlanService.fetchAllFeePlans()
-                .stream().map(feePlan ->
-                        modelMapper.map(feePlan, FeePlanDto.class)
-                ).toList();
-        return BaseResult.ok(dtoList);
+    @GetMapping
+    public BaseResult<List<FeePlanDto>> getAll() {
+        return BaseResult.ok(feePlanService.getAllDto());
     }
+
 
     /**
      * 新增或更新
@@ -50,8 +54,8 @@ public class FeeController {
      * @param dto 手續費DTO
      */
     @PostMapping
-    public BaseResult<Void> createOrUpdateFeePlan(@RequestBody FeePlanDto dto) {
-        feePlanService.createOrUpdateFeePlan(dto);
+    public BaseResult<Void> createOrUpdate(@RequestBody FeePlanDto dto) {
+        feePlanService.createOrUpdate(dto);
         return BaseResult.ok("Created Success");
     }
 
@@ -61,9 +65,9 @@ public class FeeController {
      * @param id 手續費ID
      */
     @DeleteMapping("/{id}")
-    public BaseResult<Void> deleteFeePlan(@PathVariable("id") int id) {
-        feePlanService.deleteFeePlan(id);
-        return BaseResult.ok("Deleted Success");
+    public BaseResult<Void> delete(@PathVariable("id") int id) {
+        feePlanService.delete(id);
+        return BaseResult.ok("Deleted Success, ID: " + id);
     }
 
 }
